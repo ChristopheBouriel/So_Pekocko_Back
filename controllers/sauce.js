@@ -1,17 +1,18 @@
 const Sauce = require('../models/sauce');
 const fs = require('fs');
 
+const xssFilters = require('xss-filters');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
-    //delete req.body._id;
+    //delete req.body._id; 
     const sauce = new Sauce({
-      userId: sauceObject.userId,
-      name: sauceObject.name,
-      manufacturer: sauceObject.manufacturer,
-      description: sauceObject.description,
-      mainPepper: sauceObject.mainPepper,
-      heat: sauceObject.heat,
+      userId: xssFilters.inHTMLData(sauceObject.userId),
+      name: xssFilters.inHTMLData(sauceObject.name),
+      manufacturer: xssFilters.inHTMLData(sauceObject.manufacturer),
+      description: xssFilters.inHTMLData(sauceObject.description),
+      mainPepper: xssFilters.inHTMLData(sauceObject.mainPepper),
+      heat: xssFilters.inHTMLData(sauceObject.heat),
       likes: 0,
       dislikes: 0,
       usersLiked: [],
@@ -20,7 +21,7 @@ exports.createSauce = (req, res, next) => {
     });
     sauce.save()
       .then(() => res.status(201).json({ message: 'Sauce enregistrée !'}))
-      .catch(error => res.status(400).json({ error }));
+      .catch(error => res.status(400).json({ error }));//effacer l'image parce qu'elle a déjà été enregistré par multer
 };
 
 exports.getOneSauce = (req, res, next) => {
