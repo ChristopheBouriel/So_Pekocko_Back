@@ -1,5 +1,14 @@
 const validate = require('mongoose-validator')
- 
+
+
+exports.emailValidator = [
+    validate({
+      validator: 'isEmail',
+      message: 'Invalid email address',
+    }),
+  ]
+
+
 exports.idValidator = [
     validate({
       validator: 'isLength',
@@ -11,7 +20,7 @@ exports.idValidator = [
       arguments: /^[a-z0-9]+$/i,
       //passIfEmpty: true,
       message: 'Id should contain 24 alphanumeric characters',
-    }),
+    })
   ]
 
 exports.nameValidator = [

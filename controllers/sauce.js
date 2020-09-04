@@ -21,7 +21,11 @@ exports.createSauce = (req, res, next) => {
     });
     sauce.save()
       .then(() => res.status(201).json({ message: 'Sauce enregistrée !'}))
-      .catch(error => res.status(400).json({ error }));//effacer l'image parce qu'elle a déjà été enregistré par multer
+      .catch((error) => {
+        res.status(400).json({ error });
+        const filename = sauce.imageUrl.split('/images/')[1];//effacer l'image parce qu'elle a déjà été enregistré par multer
+        fs.unlink(`images/${filename}`, () => {});
+      });
 };
 
 exports.getOneSauce = (req, res, next) => {
@@ -31,10 +35,9 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
-
-    const sauceObject = req.file ?
-    {
-        ...JSON.parse(req.body.sauce),        
+    
+  const sauceObject = req.file ?
+    {   ...JSON.parse(req.body.sauce),        
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : {...req.body};
 
