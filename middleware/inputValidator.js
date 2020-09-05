@@ -6,7 +6,7 @@ exports.emailValidator = [
       validator: 'isEmail',
       message: 'Invalid email address',
     }),
-  ]
+  ];
 
 
 exports.idValidator = [
@@ -21,7 +21,7 @@ exports.idValidator = [
       //passIfEmpty: true,
       message: 'Id should contain 24 alphanumeric characters',
     })
-  ]
+  ];
 
 exports.nameValidator = [
   validate({
@@ -34,7 +34,7 @@ exports.nameValidator = [
     arguments: /^[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F '-]+$/i,
     message: 'Name should contain only letters, apostrophe and hyphen',
   }),
-]
+];
 
 exports.manufacturerValidator = [
     validate({
@@ -47,7 +47,7 @@ exports.manufacturerValidator = [
       arguments: /^[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F '-]+$/i,
       message: 'Manufacturer name should contain only letters, apostrophe and hyphen',
     }),
-  ]
+  ];
 
   exports.descriptionValidator = [
     validate({
@@ -57,10 +57,10 @@ exports.manufacturerValidator = [
     }),
     validate({
       validator: 'matches',
-      arguments: /^[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F!?,\. '-]+$/i,
+      arguments: /^[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F!?:(),\. '-]+$/i,
       message: 'Description should contain only alphanumeric characters, dot, comma, exclamation or question marks, apostrophe and hyphen',
     }),
-  ]
+  ];
 
   exports.pepperValidator = [
     validate({
@@ -73,6 +73,6 @@ exports.manufacturerValidator = [
       arguments: /^[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F '-]+$/i,
       message: 'Main pepper name should contain only letters, apostrophe and hyphen',
     }),
-  ]
+  ];
 
   

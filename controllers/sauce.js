@@ -3,6 +3,14 @@ const fs = require('fs');
 
 const xssFilters = require('xss-filters');
 
+const regex1 = RegExp(/^[a-z0-9]{24}$/);
+const regex2 = RegExp(/^[A-Z\u00C0-\u00D6\u00D8-\u00DF]{1}[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F '-]{2,30}$/);
+const regex3 = RegExp(/^[A-Z\u00C0-\u00D6\u00D8-\u00DF]{1}[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F '-]{2,30}$/);
+const regex4 = RegExp(/^[A-Z\u00C0-\u00D6\u00D8-\u00DF]{1}[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F !?:(),\.'-]{2,600}$/);
+const regex5 = RegExp(/^[A-Z\u00C0-\u00D6\u00D8-\u00DF]{1}[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F '-]{2,30}$/);
+
+
+
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     //delete req.body._id; 
@@ -35,22 +43,47 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
-    
-  const sauceObject = req.file ?
-    {   ...JSON.parse(req.body.sauce),        
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : {...req.body};
-
+    let sauceObject;
     if (!req.file === false) {
       Sauce.findOne({_id: req.params.id})
         .then(sauce => {
           const filename = sauce.imageUrl.split('/images/')[1];
           fs.unlink(`images/${filename}`, () => {});
           });
-    };
+      sauceObject = {...JSON.parse(req.body.sauce),
+                    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`};
+    }
+    else{sauceObject = {...req.body};};
 
-    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject })
-      .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
+    let test1 = regex1.test(sauceObject.userId);
+    let test2 = regex2.test(sauceObject.name);
+    let test3 = regex3.test(sauceObject.manufacturer);
+    let test4 = regex4.test(sauceObject.description);
+    let test5 = regex5.test(sauceObject.mainPepper);
+
+    let sauceValid;
+    let acceptModif;
+    if (test1===true && test2===true && test3===true && test4===true && test5===true) {
+      sauceValid = {
+      userId: xssFilters.inHTMLData(sauceObject.userId),
+      name: xssFilters.inHTMLData(sauceObject.name),
+      manufacturer: xssFilters.inHTMLData(sauceObject.manufacturer),
+      description: xssFilters.inHTMLData(sauceObject.description),
+      mainPepper: xssFilters.inHTMLData(sauceObject.mainPepper),
+      heat: xssFilters.inHTMLData(sauceObject.heat),
+      };
+      acceptModif = true;
+    }
+
+    Sauce.updateOne({ _id: req.params.id }, { ...sauceValid })
+      .then(() => {
+        if (acceptModif === true) {
+          res.status(200).json({ message: 'Sauce modifiée !'});
+        }
+        else {
+          res.status(400).json({ message: 'Sauce non modifiée, il y a au moins une erreur dans l\'un des champs'});
+        }
+      })
       .catch(error => res.status(400).json({ error }));
 };
 
