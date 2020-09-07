@@ -8,13 +8,13 @@ exports.sauceViewLimiter = rateLimit({
 
 exports.sauceActionLimiter = rateLimit({
     windowMs: 24 * 60 * 60 * 1000,
-    max: 200,
+    max: 40,
     message: "Too many requests"
 });
 
 exports.sauceLikeLimiter = rateLimit({
     windowMs: 2 * 60 * 60 * 1000,
-    max: 10,
+    max: 100,
     message: "Too many likes/dislikes"
 });
 

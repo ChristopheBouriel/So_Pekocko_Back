@@ -52,12 +52,12 @@ exports.manufacturerValidator = [
   exports.descriptionValidator = [
     validate({
       validator: 'isLength',
-      arguments: [2, 300],
+      arguments: [2, 600],
       message: 'Description should be between 2 and 300 characters',
     }),
     validate({
       validator: 'matches',
-      arguments: /^[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F!?:(),\. '-]+$/i,
+      arguments: /^[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F!?:(),\.\n '-]+$/i,
       message: 'Description should contain only alphanumeric characters, dot, comma, exclamation or question marks, apostrophe and hyphen',
     }),
   ];
