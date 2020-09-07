@@ -8,7 +8,7 @@ exports.sauceViewLimiter = rateLimit({
 
 exports.sauceActionLimiter = rateLimit({
     windowMs: 24 * 60 * 60 * 1000,
-    max: 40,
+    max: 200,
     message: "Too many requests"
 });
 
