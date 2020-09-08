@@ -22,7 +22,10 @@ module.exports = (req, res, next) => {
           if (test1===true && test2===true && test3===true && test4===true && test5===true) {
             next();
           } else {
-            fs.unlink(`images/${req.file.filename}`, () => {});//effacer l'image parce qu'elle a déjà été enregistré par multer
+            if (!req.file === false) {
+              fs.unlink(`images/${req.file.filename}`, () => {});//effacer l'image parce qu'elle a déjà été enregistré par multer
+            }
+            
             throw 'Invalid entry';
             }
           
