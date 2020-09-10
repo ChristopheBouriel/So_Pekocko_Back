@@ -2,8 +2,6 @@ const Sauce = require('../models/sauce');
 const fs = require('fs');
 const xssFilters = require('xss-filters');
 
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
@@ -44,7 +42,6 @@ exports.modifySauce = (req, res, next) => {
         Sauce.findOne({_id: req.params.id})
           .then(sauce => {
           filename = sauce.imageUrl.split('/images/')[1];
-          //fs.unlink(`images/${filename}`, () => {});
           });
         sauceObject = { ...JSON.parse(req.body.sauce) };
        
