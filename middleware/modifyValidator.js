@@ -30,6 +30,6 @@ module.exports = (req, res, next) => {
             }
           
         } catch {
-          res.status(401).json({ message:`images/${req.file.filename}`});
+          res.status(401).json({ message:'Au moins l\'un des champs contient au moins un caractère non autorisé'});
         }
       };
